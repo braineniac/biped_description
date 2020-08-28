@@ -7,7 +7,8 @@
 
     <!-- All variable xacro macros -->>
 
-    <xacro:property name="density" value="7874"/><<!-- iron -->>>
+    <!-- iron -->>
+    <xacro:property name="density" value="7874.0"/> 
 
     <xacro:property name="body_w" value="0.40"/>
     <xacro:property name="body_d" value="0.30"/>
@@ -19,8 +20,8 @@
     <xacro:property name="leg_lower_r" value="0.02"/>
     <xacro:property name="leg_lower_l" value="0.25"/>
 
-    <xacro:property name="foot_l" value="0.15"/>
-    <xacro:property name="foot_w" value="0.25"/>
+    <xacro:property name="foot_w" value="0.15"/>
+    <xacro:property name="foot_d" value="0.25"/>
     <xacro:property name="foot_h" value="0.05"/>
 
     <xacro:property name="upper_leg_effort" value="6.5"/>
@@ -42,43 +43,43 @@
     <!-- mass calculations -->>
     <xacro:property name="joint_cylinder_mass" value="${
         density/(M_PI*joint_cylinder_r*joint_cylinder_r*joint_cylinder_l)
-    "/>
+    }"/>
     <xacro:property name="leg_lower_mass" value="${
-        density/(M_PI*leg_lower_r_r*leg_lower_r*leg_lower_l)
-    "/>
+        density/(M_PI*leg_lower_r*leg_lower_r*leg_lower_l)
+    }"/>
     <xacro:property name="leg_upper_mass" value="${
-        density/(M_PI*leg_upper_r_r*leg_upper_r*leg_upper_l)
-    "/>
+        density/(M_PI*leg_upper_r*leg_upper_r*leg_upper_l)
+    }"/>
     <xacro:property name="body_mass" value="${
-        density/(body_l*body_w*body_h)
-    "/>
+        density/(body_w*body_d*body_h)
+    }"/>
     <xacro:property name="foot_mass" value="${
-        density/(foot_l*foot_w*foot_h)
-    "/>
+        density/(foot_w*foot_d*foot_h)
+    }"/>
 
     <!-- inertial calculations -->>
-    <xacro:macro name="cylinder_inertial" params="name">
+    <xacro:macro name="cylinder_inertial" params="m r l">
         <inertial>
-            <mass value="${name}_mass"/>
+            <mass value="${m}"/>
             <inertia
-                ixx="${${name}_mass*(1/12*${name}_l**2 + 1/4*${name}_r**2)}",
-                ixy="0", ixy="0",
-                iyy="${${name}_mass*(1/12*${name}_l**2 + 1/4*${name}_r**2)}",
-                iyz="0",
-                izz="${0.5*${name}_mass*${name}_r**2)}"
+                ixx="${m*(1/12*l*l + 1/4*r*r)}"
+                ixy="0" ixz="0"
+                iyy="${m*(1/12*l*l + 1/4*r*r)}"
+                iyz="0"
+                izz="${1/2*m*r*r}"
             />
         </inertial>
     </xacro:macro>
 
-    <xacro:macro name="square_inertial" params="name">
+    <xacro:macro name="square_inertial" params="m w d h">
         <inertial>
-            <mass value="${name}_mass"/>
+            <mass value="${m}"/>
             <inertia
-                ixx="${1/12*${name}_mass*(${name}_h**2 + ${name}_d**2}",
-                ixy="0", ixz="0",
-                iyy="${1/12*${name}_mass*(${name}_w**2 + ${name}_d**2}",
-                iyz="0",
-                izz="${1/12*${name}_mass*(${name}_w**2 + ${name}_h**2}"
+                ixx="${1/12*m*(h*h + d*d)}"
+                ixy="0" ixz="0"
+                iyy="${1/12*m*(w*w + d*d)}"
+                iyz="0"
+                izz="${1/12*m*(w*w + h*h)}"
             />
         </inertial>
     </xacro:macro>
@@ -87,6 +88,7 @@
     <!-- All links and joints -->>
 
     <link name="body">
+        <xacro:square_inertial m="${body_mass}" w="${body_w}" d="${body_d}" h="${body_h}"/>
         <visual>
             <geometry>
                 <box size="${body_w} ${body_d} ${body_h}"/>
@@ -98,6 +100,7 @@
 
 
     <link name="left_leg_upper_joint_x">
+        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
@@ -108,6 +111,7 @@
     </link>
 
     <link name="right_leg_upper_joint_x">
+    <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
@@ -136,6 +140,7 @@
     </joint>
 
     <link name="left_leg_upper_joint_y">
+        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
@@ -146,6 +151,7 @@
     </link>
 
     <link name="right_leg_upper_joint_y">
+        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
@@ -175,6 +181,7 @@
 
 
     <link name="left_leg_upper">
+        <xacro:cylinder_inertial m="${leg_upper_mass}" r="${leg_upper_r}" l="${leg_upper_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${leg_upper_l}" radius="${leg_upper_r}"/>
@@ -185,6 +192,7 @@
     </link>
 
     <link name="right_leg_upper">
+        <xacro:cylinder_inertial m="${leg_upper_mass}" r="${leg_upper_r}" l="${leg_upper_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${leg_upper_l}" radius="${leg_upper_r}"/>
@@ -208,6 +216,7 @@
 
     
     <link name="left_leg_knee_x">
+        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
@@ -218,6 +227,7 @@
     </link>
 
     <link name="right_leg_knee_x">
+        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
@@ -246,6 +256,7 @@
     </joint>
 
     <link name="left_leg_lower">
+        <xacro:cylinder_inertial m="${leg_lower_mass}" r="${leg_lower_r}" l="${leg_lower_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${leg_lower_l}" radius="${leg_lower_r}"/>
@@ -256,6 +267,7 @@
     </link>
 
     <link name="right_leg_lower">
+        <xacro:cylinder_inertial m="${leg_lower_mass}" r="${leg_lower_r}" l="${leg_lower_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${leg_lower_l}" radius="${leg_lower_r}"/>
@@ -279,6 +291,7 @@
     
 
     <link name="left_leg_lower_joint_x">
+        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
@@ -289,6 +302,7 @@
     </link>
 
     <link name="right_leg_lower_joint_x">
+        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
@@ -317,6 +331,7 @@
     </joint>
 
     <link name="left_leg_lower_joint_y">
+        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
@@ -327,6 +342,7 @@
     </link>
 
     <link name="right_leg_lower_joint_y">
+        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
@@ -355,22 +371,24 @@
     </joint>
     
     <link name="left_foot">
+        <xacro:square_inertial m="${foot_mass}" w="${foot_w}" d="${foot_d}" h="${foot_h}"/>
         <visual>
             <geometry>
-                <box size="${foot_l} ${foot_w} ${foot_h}"/>
+                <box size="${foot_w} ${foot_d} ${foot_h}"/>
             </geometry>
             <material name="red"/>
-            <origin xyz="0 -${foot_w/4} -${foot_h/2}"/>
+            <origin xyz="0 -${foot_d/4} -${foot_h/2}"/>
         </visual>
     </link>
 
     <link name="right_foot">
+        <xacro:square_inertial m="${foot_mass}" w="${foot_w}" d="${foot_d}" h="${foot_h}"/>
         <visual>
             <geometry>
-                <box size="${foot_l} ${foot_w} ${foot_h}"/>
+                <box size="${foot_w} ${foot_d} ${foot_h}"/>
             </geometry>
             <material name="red"/>
-            <origin xyz="0 -${foot_w/4} -${foot_h/2}"/>
+            <origin xyz="0 -${foot_d/4} -${foot_h/2}"/>
         </visual>
     </link>
 
