@@ -1,0 +1,390 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="biped_test">
+
+    <xacro:include filename="$(find biped_description)/urdf/materials.urdf.xacro"/>
+
+    <xacro:property name="M_PI" value="3.1415926535897931" />
+
+    <!-- All variable xacro macros -->>
+
+    <xacro:property name="density" value="7874"/><<!-- iron -->>>
+
+    <xacro:property name="body_w" value="0.40"/>
+    <xacro:property name="body_d" value="0.30"/>
+    <xacro:property name="body_h" value="0.60"/>
+
+    <xacro:property name="leg_upper_r" value="0.04"/>
+    <xacro:property name="leg_upper_l" value="0.20"/>
+
+    <xacro:property name="leg_lower_r" value="0.02"/>
+    <xacro:property name="leg_lower_l" value="0.25"/>
+
+    <xacro:property name="foot_l" value="0.15"/>
+    <xacro:property name="foot_w" value="0.25"/>
+    <xacro:property name="foot_h" value="0.05"/>
+
+    <xacro:property name="upper_leg_effort" value="6.5"/>
+    <xacro:property name="upper_leg_velocity" value="10"/>
+    <xacro:property name="lower_leg_effort" value="6.5"/>
+    <xacro:property name="lower_leg_velocity" value="10"/>
+
+    <xacro:property name="joint_cylinder_r" value="0.02"/>
+    <xacro:property name="joint_cylinder_l" value="0.1"/>
+
+    <!-- All derived xacro macros -->>
+    <xacro:property name="body_z" value="${
+        body_h/2 +
+        leg_upper_l +
+        leg_lower_l +
+        foot_h
+    }"/>
+
+    <!-- mass calculations -->>
+    <xacro:property name="joint_cylinder_mass" value="${
+        density/(M_PI*joint_cylinder_r*joint_cylinder_r*joint_cylinder_l)
+    "/>
+    <xacro:property name="leg_lower_mass" value="${
+        density/(M_PI*leg_lower_r_r*leg_lower_r*leg_lower_l)
+    "/>
+    <xacro:property name="leg_upper_mass" value="${
+        density/(M_PI*leg_upper_r_r*leg_upper_r*leg_upper_l)
+    "/>
+    <xacro:property name="body_mass" value="${
+        density/(body_l*body_w*body_h)
+    "/>
+    <xacro:property name="foot_mass" value="${
+        density/(foot_l*foot_w*foot_h)
+    "/>
+
+    <!-- inertial calculations -->>
+    <xacro:macro name="cylinder_inertial" params="name">
+        <inertial>
+            <mass value="${name}_mass"/>
+            <inertia
+                ixx="${${name}_mass*(1/12*${name}_l**2 + 1/4*${name}_r**2)}",
+                ixy="0", ixy="0",
+                iyy="${${name}_mass*(1/12*${name}_l**2 + 1/4*${name}_r**2)}",
+                iyz="0",
+                izz="${0.5*${name}_mass*${name}_r**2)}"
+            />
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="square_inertial" params="name">
+        <inertial>
+            <mass value="${name}_mass"/>
+            <inertia
+                ixx="${1/12*${name}_mass*(${name}_h**2 + ${name}_d**2}",
+                ixy="0", ixz="0",
+                iyy="${1/12*${name}_mass*(${name}_w**2 + ${name}_d**2}",
+                iyz="0",
+                izz="${1/12*${name}_mass*(${name}_w**2 + ${name}_h**2}"
+            />
+        </inertial>
+    </xacro:macro>
+
+
+    <!-- All links and joints -->>
+
+    <link name="body">
+        <visual>
+            <geometry>
+                <box size="${body_w} ${body_d} ${body_h}"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 ${body_h/2}"/>
+            <material name="green"/>
+        </visual>
+    </link>
+
+
+    <link name="left_leg_upper_joint_x">
+        <visual>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${M_PI/2} 0"/>
+            <material name="yellow"/>
+        </visual>
+    </link>
+
+    <link name="right_leg_upper_joint_x">
+        <visual>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
+            <material name="yellow"/>
+        </visual>
+    </link>
+
+    <joint name="body_to_left_leg_upper_joint_x" type="revolute">
+        <parent link="body"/>
+        <child link="left_leg_upper_joint_x"/>
+        <origin xyz="${body_w/4} 0 0"/>
+        
+        <axis xyz="1 0 0"/>
+        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${upper_leg_effort}" velocity="${upper_leg_velocity}"/>
+    </joint>
+
+    <joint name="body_to_right_leg_upper_joint_x" type="revolute">
+        <parent link="body"/>
+        <child link="right_leg_upper_joint_x"/>
+        <origin xyz="-${body_w/4} 0 0"/>
+
+        <axis xyz="1 0 0"/>
+        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${upper_leg_effort}" velocity="${upper_leg_velocity}"/>
+    </joint>
+
+    <link name="left_leg_upper_joint_y">
+        <visual>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
+            <material name="blue"/>
+        </visual>
+    </link>
+
+    <link name="right_leg_upper_joint_y">
+        <visual>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
+            <material name="blue"/>
+        </visual>
+    </link>
+
+    <joint name="left_leg_upper_joint_x_to_left_leg_upper_joint_y" type="revolute">
+        <parent link="left_leg_upper_joint_x"/>
+        <child link="left_leg_upper_joint_y"/>
+        <origin xyz="0 0 -${joint_cylinder_r*2}"/>
+
+        <axis xyz="0 1 0"/>
+        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${upper_leg_effort}" velocity="${upper_leg_velocity}"/>
+    </joint>
+
+    <joint name="right_leg_upper_joint_x_to_right_leg_upper_joint_y" type="revolute">
+        <parent link="right_leg_upper_joint_x"/>
+        <child link="right_leg_upper_joint_y"/>
+        <origin xyz="0 0 -${joint_cylinder_r*2}"/>
+
+        <axis xyz="0 1 0"/>
+        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${upper_leg_effort}" velocity="${upper_leg_velocity}"/>
+    </joint>
+
+
+    <link name="left_leg_upper">
+        <visual>
+            <geometry>
+                <cylinder length="${leg_upper_l}" radius="${leg_upper_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${leg_upper_l/2}"/>
+            <material name="red"/>
+        </visual>
+    </link>
+
+    <link name="right_leg_upper">
+        <visual>
+            <geometry>
+                <cylinder length="${leg_upper_l}" radius="${leg_upper_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${leg_upper_l/2}"/>
+            <material name="red"/>
+        </visual>
+    </link>
+
+    <joint name="left_leg_upper_joint_y_to_left_leg_upper" type="fixed">
+        <parent link="left_leg_upper_joint_y"/>
+        <child link="left_leg_upper"/>
+        <origin xyz="0 0 -${joint_cylinder_r*2}"/>
+    </joint>
+
+    <joint name="right_leg_upper_joint_y_to_right_leg_upper" type="fixed">
+        <parent link="right_leg_upper_joint_y"/>
+        <child link="right_leg_upper"/>
+        <origin xyz="0 0 -${joint_cylinder_r*2}"/>
+    </joint>
+
+    
+    <link name="left_leg_knee_x">
+        <visual>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
+            <material name="yellow"/>
+        </visual>
+    </link>
+
+    <link name="right_leg_knee_x">
+        <visual>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
+            <material name="yellow"/>
+        </visual>
+    </link>
+
+    <joint name="left_leg_upper_to_left_leg_knee_x" type="revolute">
+        <parent link="left_leg_upper"/>
+        <child link="left_leg_knee_x"/>
+        <origin xyz="0 0 -${leg_upper_l}"/>
+
+        <axis xyz="1 0 0"/>
+        <limit upper="${M_PI/2}" lower="0" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
+    </joint>
+
+    <joint name="right_leg_upper_to_right_knee_x" type="revolute">
+        <parent link="right_leg_upper"/>
+        <child link="right_leg_knee_x"/>
+        <origin xyz="0 0 -${leg_upper_l}"/>
+
+        <axis xyz="1 0 0"/>
+        <limit upper="${M_PI/2}" lower="0" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
+    </joint>
+
+    <link name="left_leg_lower">
+        <visual>
+            <geometry>
+                <cylinder length="${leg_lower_l}" radius="${leg_lower_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${leg_lower_l/2}"/>
+            <material name="red"/>
+        </visual>
+    </link>
+
+    <link name="right_leg_lower">
+        <visual>
+            <geometry>
+                <cylinder length="${leg_lower_l}" radius="${leg_lower_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${leg_lower_l/2}"/>
+            <material name="red"/>
+        </visual>
+    </link>
+
+    <joint name="left_leg_knee_x_to_left_leg_lower" type="fixed">
+        <parent link="left_leg_knee_x"/>
+        <child link="left_leg_lower"/>
+        <origin xyz="0 0 -${joint_cylinder_r*2}"/>
+    </joint>
+
+    <joint name="right_leg_knee_x_to_right_leg_lower" type="fixed">
+        <parent link="right_leg_knee_x"/>
+        <child link="right_leg_lower"/>
+        <origin xyz="0 0 -${joint_cylinder_r*2}"/>
+    </joint>
+    
+
+    <link name="left_leg_lower_joint_x">
+        <visual>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${M_PI/2} 0"/>
+            <material name="yellow"/>
+        </visual>
+    </link>
+
+    <link name="right_leg_lower_joint_x">
+        <visual>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
+            <material name="yellow"/>
+        </visual>
+    </link>
+
+    <joint name="left_leg_lower_to_left_leg_lower_joint_x" type="revolute">
+        <parent link="left_leg_lower"/>
+        <child link="left_leg_lower_joint_x"/>
+        <origin xyz="0 0 -${leg_lower_l}"/>
+        
+        <axis xyz="1 0 0"/>
+        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
+    </joint>
+
+    <joint name="right_leg_lower_to_right_leg_lower_joint_x" type="revolute">
+        <parent link="right_leg_lower"/>
+        <child link="right_leg_lower_joint_x"/>
+        <origin xyz="0 0 -${leg_lower_l}"/>
+
+        <axis xyz="1 0 0"/>
+        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
+    </joint>
+
+    <link name="left_leg_lower_joint_y">
+        <visual>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
+            <material name="blue"/>
+        </visual>
+    </link>
+
+    <link name="right_leg_lower_joint_y">
+        <visual>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
+            <material name="blue"/>
+        </visual>
+    </link>
+
+    <joint name="left_leg_lower_joint_x_to_left_leg_lower_joint_y" type="revolute">
+        <parent link="left_leg_lower_joint_x"/>
+        <child link="left_leg_lower_joint_y"/>
+        <origin xyz="0 0 -${joint_cylinder_r*2}"/>
+
+        <axis xyz="0 1 0"/>
+        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
+    </joint>
+
+    <joint name="right_leg_lower_joint_x_to_right_leg_lower_joint_y" type="revolute">
+        <parent link="right_leg_lower_joint_x"/>
+        <child link="right_leg_lower_joint_y"/>
+        <origin xyz="0 0 -${joint_cylinder_r*2}"/>
+
+        <axis xyz="0 1 0"/>
+        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
+    </joint>
+    
+    <link name="left_foot">
+        <visual>
+            <geometry>
+                <box size="${foot_l} ${foot_w} ${foot_h}"/>
+            </geometry>
+            <material name="red"/>
+            <origin xyz="0 -${foot_w/4} -${foot_h/2}"/>
+        </visual>
+    </link>
+
+    <link name="right_foot">
+        <visual>
+            <geometry>
+                <box size="${foot_l} ${foot_w} ${foot_h}"/>
+            </geometry>
+            <material name="red"/>
+            <origin xyz="0 -${foot_w/4} -${foot_h/2}"/>
+        </visual>
+    </link>
+
+    <joint name="left_leg_lower_joint_y_to_left_foot" type="fixed">
+    <parent link="left_leg_lower_joint_y"/>
+        <child link="left_foot"/>
+        <origin xyz="0 0 -${joint_cylinder_r*2}"/>
+    </joint>
+
+    <joint name="right_leg_lower_joint_y_to_right_foot" type="fixed">
+    <parent link="right_leg_lower_joint_y"/>
+        <child link="right_foot"/>
+        <origin xyz="0 0 -${joint_cylinder_r*2}"/>
+    </joint>
+
+
+</robot>
