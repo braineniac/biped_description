@@ -87,6 +87,9 @@
 
     <!-- All links and joints -->>
 
+    <link name="base_link">
+    </link>
+
     <link name="body">
         <xacro:square_inertial m="${body_mass}" w="${body_w}" d="${body_d}" h="${body_h}"/>
         <visual>
@@ -96,7 +99,19 @@
             <origin rpy="0 0 0" xyz="0 0 ${body_h/2}"/>
             <material name="green"/>
         </visual>
+        <collision>
+            <geometry>
+                <box size="${body_w} ${body_d} ${body_h}"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 ${body_h/2}"/>
+        </collision>
     </link>
+
+    <joint name="base_link_to_body" type="fixed">
+        <parent link="base_link"/>
+        <child link="body"/>
+        <origin xyz="0 0 0"/>
+    </joint>
 
 
     <link name="left_leg_upper_joint_x">
@@ -108,6 +123,12 @@
             <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${M_PI/2} 0"/>
             <material name="yellow"/>
         </visual>
+        <collision>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${M_PI/2} 0"/>
+        </collision>
     </link>
 
     <link name="right_leg_upper_joint_x">
@@ -119,6 +140,12 @@
             <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
             <material name="yellow"/>
         </visual>
+        <collision>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
+        </collision>
     </link>
 
     <joint name="body_to_left_leg_upper_joint_x" type="revolute">
@@ -148,6 +175,12 @@
             <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
             <material name="blue"/>
         </visual>
+        <collision>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
+        </collision>
     </link>
 
     <link name="right_leg_upper_joint_y">
@@ -159,6 +192,12 @@
             <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
             <material name="blue"/>
         </visual>
+        <collision>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
+        </collision>
     </link>
 
     <joint name="left_leg_upper_joint_x_to_left_leg_upper_joint_y" type="revolute">
@@ -189,6 +228,12 @@
             <origin xyz="0 0 -${leg_upper_l/2}"/>
             <material name="red"/>
         </visual>
+        <collision>
+            <geometry>
+                <cylinder length="${leg_upper_l}" radius="${leg_upper_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${leg_upper_l/2}"/>
+        </collision>
     </link>
 
     <link name="right_leg_upper">
@@ -200,6 +245,12 @@
             <origin xyz="0 0 -${leg_upper_l/2}"/>
             <material name="red"/>
         </visual>
+        <collision>
+            <geometry>
+                <cylinder length="${leg_upper_l}" radius="${leg_upper_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${leg_upper_l/2}"/>
+        </collision>
     </link>
 
     <joint name="left_leg_upper_joint_y_to_left_leg_upper" type="fixed">
@@ -224,6 +275,12 @@
             <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
             <material name="yellow"/>
         </visual>
+        <collision>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
+        </collision>
     </link>
 
     <link name="right_leg_knee_x">
@@ -235,6 +292,12 @@
             <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
             <material name="yellow"/>
         </visual>
+        <collision>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
+        </collision>
     </link>
 
     <joint name="left_leg_upper_to_left_leg_knee_x" type="revolute">
@@ -264,6 +327,12 @@
             <origin xyz="0 0 -${leg_lower_l/2}"/>
             <material name="red"/>
         </visual>
+        <collision>
+            <geometry>
+                <cylinder length="${leg_lower_l}" radius="${leg_lower_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${leg_lower_l/2}"/>
+        </collision>
     </link>
 
     <link name="right_leg_lower">
@@ -275,6 +344,12 @@
             <origin xyz="0 0 -${leg_lower_l/2}"/>
             <material name="red"/>
         </visual>
+        <collision>
+            <geometry>
+                <cylinder length="${leg_lower_l}" radius="${leg_lower_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${leg_lower_l/2}"/>
+        </collision>
     </link>
 
     <joint name="left_leg_knee_x_to_left_leg_lower" type="fixed">
@@ -299,6 +374,12 @@
             <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${M_PI/2} 0"/>
             <material name="yellow"/>
         </visual>
+        <collision>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${M_PI/2} 0"/>
+        </collision>
     </link>
 
     <link name="right_leg_lower_joint_x">
@@ -310,6 +391,12 @@
             <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
             <material name="yellow"/>
         </visual>
+        <collision>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${M_PI/2} 0"/>
+        </collision>
     </link>
 
     <joint name="left_leg_lower_to_left_leg_lower_joint_x" type="revolute">
@@ -339,6 +426,12 @@
             <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
             <material name="blue"/>
         </visual>
+        <collision>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${M_PI/2} 0"/>
+        </collision>
     </link>
 
     <link name="right_leg_lower_joint_y">
@@ -350,6 +443,12 @@
             <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
             <material name="blue"/>
         </visual>
+        <collision>
+            <geometry>
+                <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
+            </geometry>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
+        </collision>
     </link>
 
     <joint name="left_leg_lower_joint_x_to_left_leg_lower_joint_y" type="revolute">
@@ -376,9 +475,15 @@
             <geometry>
                 <box size="${foot_w} ${foot_d} ${foot_h}"/>
             </geometry>
-            <material name="red"/>
             <origin xyz="0 -${foot_d/4} -${foot_h/2}"/>
+            <material name="red"/>
         </visual>
+        <collision>
+            <geometry>
+                <box size="${foot_w} ${foot_d} ${foot_h}"/>
+            </geometry>
+            <origin xyz="0 -${foot_d/4} -${foot_h/2}"/>
+        </collision>
     </link>
 
     <link name="right_foot">
@@ -387,9 +492,15 @@
             <geometry>
                 <box size="${foot_w} ${foot_d} ${foot_h}"/>
             </geometry>
-            <material name="red"/>
             <origin xyz="0 -${foot_d/4} -${foot_h/2}"/>
+            <material name="red"/>
         </visual>
+        <collision>
+            <geometry>
+                <box size="${foot_w} ${foot_d} ${foot_h}"/>
+            </geometry>
+            <origin xyz="0 -${foot_d/4} -${foot_h/2}"/>
+        </collision>
     </link>
 
     <joint name="left_leg_lower_joint_y_to_left_foot" type="fixed">
@@ -404,5 +515,24 @@
         <origin xyz="0 0 -${joint_cylinder_r*2}"/>
     </joint>
 
+    <!-- Transmissions -->>
+
+    <transmission name="left_foot_pitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="$foot_pitch_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="left_leg_lower_joint_x_to_left_leg_lower_joint_y">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+
+    <!-- Gazebo plugin for ROS Control -->
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/</robotNamespace>
+        </plugin>
+    </gazebo>
 
 </robot>
