@@ -2,13 +2,11 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="biped_test">
 
     <xacro:include filename="$(find biped_description)/urdf/materials.urdf.xacro"/>
-
-    <xacro:property name="M_PI" value="3.1415926535897931" />
+    <xacro:include filename="$(find biped_description)/urdf/inertials.urdf.xacro"/>
 
     <!-- All variable xacro macros -->>
 
-    <!-- iron -->>
-    <xacro:property name="density" value="7874.0"/> 
+    <xacro:property name="rho_Fe" value="7874.0"/>
 
     <xacro:property name="body_w" value="0.40"/>
     <xacro:property name="body_d" value="0.30"/>
@@ -40,58 +38,13 @@
         foot_h
     }"/>
 
-    <!-- mass calculations -->>
-    <xacro:property name="joint_cylinder_mass" value="${
-        density/(M_PI*joint_cylinder_r*joint_cylinder_r*joint_cylinder_l)
-    }"/>
-    <xacro:property name="leg_lower_mass" value="${
-        density/(M_PI*leg_lower_r*leg_lower_r*leg_lower_l)
-    }"/>
-    <xacro:property name="leg_upper_mass" value="${
-        density/(M_PI*leg_upper_r*leg_upper_r*leg_upper_l)
-    }"/>
-    <xacro:property name="body_mass" value="${
-        density/(body_w*body_d*body_h)
-    }"/>
-    <xacro:property name="foot_mass" value="${
-        density/(foot_w*foot_d*foot_h)
-    }"/>
-
-    <!-- inertial calculations -->>
-    <xacro:macro name="cylinder_inertial" params="m r l">
-        <inertial>
-            <mass value="${m}"/>
-            <inertia
-                ixx="${m*(1/12*l*l + 1/4*r*r)}"
-                ixy="0" ixz="0"
-                iyy="${m*(1/12*l*l + 1/4*r*r)}"
-                iyz="0"
-                izz="${1/2*m*r*r}"
-            />
-        </inertial>
-    </xacro:macro>
-
-    <xacro:macro name="square_inertial" params="m w d h">
-        <inertial>
-            <mass value="${m}"/>
-            <inertia
-                ixx="${1/12*m*(h*h + d*d)}"
-                ixy="0" ixz="0"
-                iyy="${1/12*m*(w*w + d*d)}"
-                iyz="0"
-                izz="${1/12*m*(w*w + h*h)}"
-            />
-        </inertial>
-    </xacro:macro>
-
-
     <!-- All links and joints -->>
 
     <link name="base_link">
     </link>
 
     <link name="body">
-        <xacro:square_inertial m="${body_mass}" w="${body_w}" d="${body_d}" h="${body_h}"/>
+        <xacro:square_inertial rho="${rho_Fe}" w="${body_w}" d="${body_d}" h="${body_h}"/>
         <visual>
             <geometry>
                 <box size="${body_w} ${body_d} ${body_h}"/>
@@ -115,36 +68,36 @@
 
 
     <link name="left_leg_upper_joint_x">
-        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
+        <xacro:cylinder_inertial rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${M_PI/2} 0"/>
+            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${pi/2} 0"/>
             <material name="yellow"/>
         </visual>
         <collision>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${M_PI/2} 0"/>
+            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${pi/2} 0"/>
         </collision>
     </link>
 
     <link name="right_leg_upper_joint_x">
-    <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
+    <xacro:cylinder_inertial rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${pi/2} 0"/>
             <material name="yellow"/>
         </visual>
         <collision>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${pi/2} 0"/>
         </collision>
     </link>
 
@@ -154,7 +107,7 @@
         <origin xyz="${body_w/4} 0 0"/>
         
         <axis xyz="1 0 0"/>
-        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${upper_leg_effort}" velocity="${upper_leg_velocity}"/>
+        <limit upper="${pi/2}" lower="-${pi/2}" effort="${upper_leg_effort}" velocity="${upper_leg_velocity}"/>
     </joint>
 
     <joint name="body_to_right_leg_upper_joint_x" type="revolute">
@@ -163,40 +116,40 @@
         <origin xyz="-${body_w/4} 0 0"/>
 
         <axis xyz="1 0 0"/>
-        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${upper_leg_effort}" velocity="${upper_leg_velocity}"/>
+        <limit upper="${pi/2}" lower="-${pi/2}" effort="${upper_leg_effort}" velocity="${upper_leg_velocity}"/>
     </joint>
 
     <link name="left_leg_upper_joint_y">
-        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
+        <xacro:cylinder_inertial rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${pi/2} ${pi/2}"/>
             <material name="blue"/>
         </visual>
         <collision>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${pi/2} ${pi/2}"/>
         </collision>
     </link>
 
     <link name="right_leg_upper_joint_y">
-        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
+        <xacro:cylinder_inertial rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${pi/2} ${pi/2}"/>
             <material name="blue"/>
         </visual>
         <collision>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${pi/2} ${pi/2}"/>
         </collision>
     </link>
 
@@ -206,7 +159,7 @@
         <origin xyz="0 0 -${joint_cylinder_r*2}"/>
 
         <axis xyz="0 1 0"/>
-        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${upper_leg_effort}" velocity="${upper_leg_velocity}"/>
+        <limit upper="${pi/2}" lower="-${pi/2}" effort="${upper_leg_effort}" velocity="${upper_leg_velocity}"/>
     </joint>
 
     <joint name="right_leg_upper_joint_x_to_right_leg_upper_joint_y" type="revolute">
@@ -215,12 +168,12 @@
         <origin xyz="0 0 -${joint_cylinder_r*2}"/>
 
         <axis xyz="0 1 0"/>
-        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${upper_leg_effort}" velocity="${upper_leg_velocity}"/>
+        <limit upper="${pi/2}" lower="-${pi/2}" effort="${upper_leg_effort}" velocity="${upper_leg_velocity}"/>
     </joint>
 
 
     <link name="left_leg_upper">
-        <xacro:cylinder_inertial m="${leg_upper_mass}" r="${leg_upper_r}" l="${leg_upper_l}"/>
+        <xacro:cylinder_inertial rho="${rho_Fe}" r="${leg_upper_r}" l="${leg_upper_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${leg_upper_l}" radius="${leg_upper_r}"/>
@@ -237,7 +190,7 @@
     </link>
 
     <link name="right_leg_upper">
-        <xacro:cylinder_inertial m="${leg_upper_mass}" r="${leg_upper_r}" l="${leg_upper_l}"/>
+        <xacro:cylinder_inertial rho="${rho_Fe}" r="${leg_upper_r}" l="${leg_upper_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${leg_upper_l}" radius="${leg_upper_r}"/>
@@ -267,36 +220,36 @@
 
     
     <link name="left_leg_knee_x">
-        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
+        <xacro:cylinder_inertial rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${pi/2} 0"/>
             <material name="yellow"/>
         </visual>
         <collision>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${pi/2} 0"/>
         </collision>
     </link>
 
     <link name="right_leg_knee_x">
-        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
+        <xacro:cylinder_inertial rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${pi/2} 0"/>
             <material name="yellow"/>
         </visual>
         <collision>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${pi/2} 0"/>
         </collision>
     </link>
 
@@ -306,7 +259,7 @@
         <origin xyz="0 0 -${leg_upper_l}"/>
 
         <axis xyz="1 0 0"/>
-        <limit upper="${M_PI/2}" lower="0" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
+        <limit upper="${pi/2}" lower="0" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
     </joint>
 
     <joint name="right_leg_upper_to_right_knee_x" type="revolute">
@@ -315,11 +268,11 @@
         <origin xyz="0 0 -${leg_upper_l}"/>
 
         <axis xyz="1 0 0"/>
-        <limit upper="${M_PI/2}" lower="0" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
+        <limit upper="${pi/2}" lower="0" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
     </joint>
 
     <link name="left_leg_lower">
-        <xacro:cylinder_inertial m="${leg_lower_mass}" r="${leg_lower_r}" l="${leg_lower_l}"/>
+        <xacro:cylinder_inertial rho="${rho_Fe}" r="${leg_lower_r}" l="${leg_lower_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${leg_lower_l}" radius="${leg_lower_r}"/>
@@ -336,7 +289,7 @@
     </link>
 
     <link name="right_leg_lower">
-        <xacro:cylinder_inertial m="${leg_lower_mass}" r="${leg_lower_r}" l="${leg_lower_l}"/>
+        <xacro:cylinder_inertial rho="${rho_Fe}" r="${leg_lower_r}" l="${leg_lower_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${leg_lower_l}" radius="${leg_lower_r}"/>
@@ -366,36 +319,36 @@
     
 
     <link name="left_leg_lower_joint_x">
-        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
+        <xacro:cylinder_inertial rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${M_PI/2} 0"/>
+            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${pi/2} 0"/>
             <material name="yellow"/>
         </visual>
         <collision>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${M_PI/2} 0"/>
+            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${pi/2} 0"/>
         </collision>
     </link>
 
     <link name="right_leg_lower_joint_x">
-        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
+        <xacro:cylinder_inertial rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} 0"/>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${pi/2} 0"/>
             <material name="yellow"/>
         </visual>
         <collision>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${M_PI/2} 0"/>
+            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${pi/2} 0"/>
         </collision>
     </link>
 
@@ -405,7 +358,7 @@
         <origin xyz="0 0 -${leg_lower_l}"/>
         
         <axis xyz="1 0 0"/>
-        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
+        <limit upper="${pi/2}" lower="-${pi/2}" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
     </joint>
 
     <joint name="right_leg_lower_to_right_leg_lower_joint_x" type="revolute">
@@ -414,40 +367,40 @@
         <origin xyz="0 0 -${leg_lower_l}"/>
 
         <axis xyz="1 0 0"/>
-        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
+        <limit upper="${pi/2}" lower="-${pi/2}" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
     </joint>
 
     <link name="left_leg_lower_joint_y">
-        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
+        <xacro:cylinder_inertial rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${pi/2} ${pi/2}"/>
             <material name="blue"/>
         </visual>
         <collision>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${M_PI/2} 0"/>
+            <origin xyz=" 0 0 -${joint_cylinder_r} " rpy="0 ${pi/2} 0"/>
         </collision>
     </link>
 
     <link name="right_leg_lower_joint_y">
-        <xacro:cylinder_inertial m="${joint_cylinder_mass}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
+        <xacro:cylinder_inertial rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}"/>
         <visual>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${pi/2} ${pi/2}"/>
             <material name="blue"/>
         </visual>
         <collision>
             <geometry>
                 <cylinder length="${joint_cylinder_l}" radius="${joint_cylinder_r}"/>
             </geometry>
-            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${M_PI/2} ${M_PI/2}"/>
+            <origin xyz="0 0 -${joint_cylinder_r}" rpy="0 ${pi/2} ${pi/2}"/>
         </collision>
     </link>
 
@@ -457,7 +410,7 @@
         <origin xyz="0 0 -${joint_cylinder_r*2}"/>
 
         <axis xyz="0 1 0"/>
-        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
+        <limit upper="${pi/2}" lower="-${pi/2}" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
     </joint>
 
     <joint name="right_leg_lower_joint_x_to_right_leg_lower_joint_y" type="revolute">
@@ -466,11 +419,11 @@
         <origin xyz="0 0 -${joint_cylinder_r*2}"/>
 
         <axis xyz="0 1 0"/>
-        <limit upper="${M_PI/2}" lower="-${M_PI/2}" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
+        <limit upper="${pi/2}" lower="-${pi/2}" effort="${lower_leg_effort}" velocity="${lower_leg_velocity}"/>
     </joint>
     
     <link name="left_foot">
-        <xacro:square_inertial m="${foot_mass}" w="${foot_w}" d="${foot_d}" h="${foot_h}"/>
+        <xacro:square_inertial rho="${rho_Fe}" w="${foot_w}" d="${foot_d}" h="${foot_h}"/>
         <visual>
             <geometry>
                 <box size="${foot_w} ${foot_d} ${foot_h}"/>
@@ -487,7 +440,7 @@
     </link>
 
     <link name="right_foot">
-        <xacro:square_inertial m="${foot_mass}" w="${foot_w}" d="${foot_d}" h="${foot_h}"/>
+        <xacro:square_inertial rho="${rho_Fe}" w="${foot_w}" d="${foot_d}" h="${foot_h}"/>
         <visual>
             <geometry>
                 <box size="${foot_w} ${foot_d} ${foot_h}"/>
