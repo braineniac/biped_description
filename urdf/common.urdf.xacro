@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="rho_Fe" value="7874.0"/>
+
+    <xacro:property name="body_w" value="0.40"/>
+    <xacro:property name="body_d" value="0.30"/>
+    <xacro:property name="body_h" value="0.60"/>
+
+    <xacro:property name="leg_upper_r" value="0.04"/>
+    <xacro:property name="leg_upper_l" value="0.20"/>
+
+    <xacro:property name="leg_lower_r" value="0.02"/>
+    <xacro:property name="leg_lower_l" value="0.25"/>
+
+    <xacro:property name="foot_w" value="0.15"/>
+    <xacro:property name="foot_d" value="0.25"/>
+    <xacro:property name="foot_h" value="0.05"/>
+
+    <xacro:property name="default_effort" value="6.5"/>
+    <xacro:property name="default_velocity" value="10"/>
+
+    <xacro:property name="joint_cylinder_r" value="0.02"/>
+    <xacro:property name="joint_cylinder_l" value="0.1"/>
+
+    <xacro:macro name="rot_link" params="prefix rho r l *rot_origin *material">
+        <link name="${prefix}_link">
+            <xacro:solid_cylinder_inertial rho="${rho}" r="${r}" l="${l}"/>
+            <visual>
+                <geometry>
+                    <cylinder length="${l}" radius="${r}"/>
+                </geometry>
+                <xacro:insert_block name="rot_origin"/>
+                <xacro:insert_block name="material"/>
+            </visual>
+            <collision>
+                <geometry>
+                    <cylinder length="${l}" radius="${r}"/>
+                </geometry>
+                <xacro:insert_block name="rot_origin"/>
+            </collision>
+        </link>
+    </xacro:macro>
+
+    <xacro:macro name="rot_x_origin">
+        <origin rpy="0 ${pi/2} 0"/>
+    </xacro:macro>
+
+    <xacro:macro name="rot_y_origin">
+        <origin rpy="0 ${pi/2} ${pi/2}"/>
+    </xacro:macro>
+
+
+    <xacro:macro name="cuboid_link" params="prefix rho w d h *material">
+        <link name="${prefix}_link">
+            <xacro:solid_cuboid_inertial rho="${rho}" w="${w}" d="${d}" h="${h}"/>
+            <visual>
+                <geometry>
+                    <box size="${w} ${d} ${h}"/>
+                </geometry>
+                <xacro:insert_block name="material"/>
+            </visual>
+            <collision>
+                <geometry>
+                    <box size="${w} ${d} ${h}"/>
+                </geometry>
+            </collision>
+        </link>
+    </xacro:macro>
+
+    <xacro:macro name="default_rot_joint" params="parent child *origin *axis">
+        <joint name="${parent}_link_${child}_link_joint" type="revolute">
+            <parent link="${parent}_link"/>
+            <child link="${child}_link"/>
+            <xacro:insert_block name="origin"/>
+            <xacro:insert_block name="axis"/>
+            <limit upper="${pi/2}" lower="-${pi/2}" effort="${default_effort}" velocity="${default_velocity}"/>
+        </joint>
+    </xacro:macro>
+
+    <xacro:macro name="default_fixed_joint" params="parent child *origin">
+        <joint name="${parent}_link_${child}_link_joint" type="fixed">
+            <parent link="${parent}_link"/>
+            <child link="${child}_link"/>
+            <xacro:insert_block name="origin"/>
+        </joint>
+    </xacro:macro>
+
+    <xacro:macro name="joint_trans" params="parent child">
+        <transmission name="${parent}_${child}_trans">
+            <type>transmission_interface/SimpleTransmission</type>
+            <actuator name="${parent}_link_${child}_link_joint_motor">
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+            <joint name="${parent}_link_${child}_link_joint">
+                <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            </joint>
+        </transmission>
+    </xacro:macro>
+
+</robot>

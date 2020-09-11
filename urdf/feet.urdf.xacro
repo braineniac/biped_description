@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+    <!--======================================================-->>
+    <xacro:rot_link prefix="right_foot_roll" rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}">
+        <xacro:rot_x_origin/>
+        <material name="yellow"/>
+    </xacro:rot_link>
+
+    <xacro:default_rot_joint parent="right_lower_leg" child="right_foot_roll">
+        <origin xyz="0 0 -${leg_lower_l/2}"/>
+        <axis xyz="1 0 0"/>
+    </xacro:default_rot_joint>
+
+    <xacro:joint_trans parent="right_lower_leg" child="right_foot_roll"/>
+    <!--======================================================-->>
+
+    <!--======================================================-->>
+    <xacro:rot_link prefix="left_foot_roll" rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}">
+        <xacro:rot_x_origin/>
+        <material name="yellow"/>
+    </xacro:rot_link>
+
+    <xacro:default_rot_joint parent="left_lower_leg" child="left_foot_roll">
+        <origin xyz="0 0 -${leg_lower_l/2}"/>
+        <axis xyz="1 0 0"/>
+    </xacro:default_rot_joint>
+
+    <xacro:joint_trans parent="left_lower_leg" child="left_foot_roll"/>
+    <!--======================================================-->>
+
+    <!--======================================================-->>
+    <xacro:rot_link prefix="right_foot_pitch" rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}">
+        <xacro:rot_y_origin/>
+        <material name="blue"/>
+    </xacro:rot_link>
+
+    <xacro:default_rot_joint parent="right_foot_roll" child="right_foot_pitch">
+        <origin xyz="0 0 ${-2*joint_cylinder_r}"/>
+        <axis xyz="0 1 0"/>
+    </xacro:default_rot_joint>
+
+    <xacro:joint_trans parent="right_foot_roll" child="right_foot_pitch"/>
+    <!--======================================================-->>
+
+    <!--======================================================-->>
+    <xacro:rot_link prefix="left_foot_pitch" rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}">
+        <xacro:rot_y_origin/>
+        <material name="blue"/>
+    </xacro:rot_link>
+
+    <xacro:default_rot_joint parent="left_foot_roll" child="left_foot_pitch">
+        <origin xyz="0 0 ${-2*joint_cylinder_r}"/>
+        <axis xyz="0 1 0"/>
+    </xacro:default_rot_joint>
+
+    <xacro:joint_trans parent="left_foot_roll" child="left_foot_pitch"/>
+    <!--======================================================-->>
+
+    <!--======================================================-->>
+    <xacro:cuboid_link prefix="right_foot" rho="${rho_Fe}" w="${foot_w}" d="${foot_d}" h="${foot_h}">
+        <material name="red"/>
+    </xacro:cuboid_link>
+
+    <xacro:default_fixed_joint parent="right_foot_pitch" child="right_foot">
+        <origin xyz="0 0 -${joint_cylinder_r*2}"/>
+    </xacro:default_fixed_joint>
+    <!--======================================================-->>
+
+    <!--======================================================-->>
+    <xacro:cuboid_link prefix="left_foot" rho="${rho_Fe}" w="${foot_w}" d="${foot_d}" h="${foot_h}">
+        <material name="red"/>
+    </xacro:cuboid_link>
+
+    <xacro:default_fixed_joint parent="left_foot_pitch" child="left_foot">
+        <origin xyz="0 0 -${joint_cylinder_r*2}"/>
+    </xacro:default_fixed_joint>
+    <!--======================================================-->>
+
+</robot>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="biped">
+
+    <xacro:include filename="$(find biped_description)/urdf/common.urdf.xacro"/>
+    <xacro:include filename="$(find biped_description)/urdf/inertials.urdf.xacro"/>
+    <xacro:include filename="$(find biped_description)/urdf/materials.urdf.xacro"/>
+    <xacro:include filename="$(find biped_description)/urdf/body.urdf.xacro"/>
+    <xacro:include filename="$(find biped_description)/urdf/upper_legs.urdf.xacro"/>
+    <xacro:include filename="$(find biped_description)/urdf/lower_legs.urdf.xacro"/>
+    <xacro:include filename="$(find biped_description)/urdf/feet.urdf.xacro"/>
+
+
+    <!-- Gazebo plugin for ROS Control -->
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/</robotNamespace>
+        </plugin>
+    </gazebo>
+
+</robot>

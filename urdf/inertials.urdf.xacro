@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <xacro:macro name="cylinder_inertial" params="rho r l">
+    <xacro:macro name="solid_cylinder_inertial" params="rho r l">
         <inertial>
             <mass value="${rho*(pi*r*r*l)}"/>
             <inertia
@@ -14,7 +14,7 @@
         </inertial>
     </xacro:macro>
 
-    <xacro:macro name="square_inertial" params="rho w d h">
+    <xacro:macro name="solid_cuboid_inertial" params="rho w d h">
         <inertial>
             <mass value="${rho*(w*d*h)}"/>
             <inertia
