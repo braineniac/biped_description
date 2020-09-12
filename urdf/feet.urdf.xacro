@@ -14,6 +14,8 @@
     </xacro:default_rot_joint>
 
     <xacro:joint_trans parent="right_lower_leg" child="right_foot_roll"/>
+
+    <xacro:gazebo_ref prefix="right_foot_roll" material="Gazebo/Yellow"/>
     <!--======================================================-->>
 
     <!--======================================================-->>
@@ -28,6 +30,8 @@
     </xacro:default_rot_joint>
 
     <xacro:joint_trans parent="left_lower_leg" child="left_foot_roll"/>
+
+    <xacro:gazebo_ref prefix="left_foot_roll" material="Gazebo/Yellow"/>
     <!--======================================================-->>
 
     <!--======================================================-->>
@@ -42,6 +46,8 @@
     </xacro:default_rot_joint>
 
     <xacro:joint_trans parent="right_foot_roll" child="right_foot_pitch"/>
+
+    <xacro:gazebo_ref prefix="right_foot_pitch" material="Gazebo/Blue"/>
     <!--======================================================-->>
 
     <!--======================================================-->>
@@ -56,6 +62,8 @@
     </xacro:default_rot_joint>
 
     <xacro:joint_trans parent="left_foot_roll" child="left_foot_pitch"/>
+
+    <xacro:gazebo_ref prefix="left_foot_pitch" material="Gazebo/Blue"/>
     <!--======================================================-->>
 
     <!--======================================================-->>
@@ -66,6 +74,8 @@
     <xacro:default_fixed_joint parent="right_foot_pitch" child="right_foot">
         <origin xyz="0 0 -${joint_cylinder_r*2}"/>
     </xacro:default_fixed_joint>
+
+    <xacro:gazebo_ref prefix="right_foot" material="Gazebo/Red"/>
     <!--======================================================-->>
 
     <!--======================================================-->>
@@ -76,6 +86,8 @@
     <xacro:default_fixed_joint parent="left_foot_pitch" child="left_foot">
         <origin xyz="0 0 -${joint_cylinder_r*2}"/>
     </xacro:default_fixed_joint>
+
+    <xacro:gazebo_ref prefix="left_foot" material="Gazebo/Red"/>
     <!--======================================================-->>
 
 </robot>

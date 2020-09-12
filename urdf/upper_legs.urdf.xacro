@@ -14,6 +14,8 @@
     </xacro:default_rot_joint>
 
     <xacro:joint_trans parent="body" child="right_upper_leg_roll"/>
+
+    <xacro:gazebo_ref prefix="right_upper_leg_roll" material="Gazebo/Yellow"/>
     <!--======================================================-->>
 
     <!--======================================================-->>
@@ -28,6 +30,8 @@
     </xacro:default_rot_joint>
 
     <xacro:joint_trans parent="body" child="left_upper_leg_roll"/>
+
+    <xacro:gazebo_ref prefix="left_upper_leg_roll" material="Gazebo/Yellow"/>
     <!--======================================================-->>
 
     <!--======================================================-->>
@@ -42,6 +46,8 @@
     </xacro:default_rot_joint>
 
     <xacro:joint_trans parent="right_upper_leg_roll" child="right_upper_leg_pitch"/>
+
+    <xacro:gazebo_ref prefix="right_upper_leg_pitch" material="Gazebo/Blue"/>
     <!--======================================================-->>
 
     <!--======================================================-->>
@@ -56,6 +62,8 @@
     </xacro:default_rot_joint>
 
     <xacro:joint_trans parent="left_upper_leg_roll" child="left_upper_leg_pitch"/>
+
+    <xacro:gazebo_ref prefix="left_upper_leg_pitch" material="Gazebo/Blue"/>
     <!--======================================================-->>
 
     <!--======================================================-->>
@@ -67,6 +75,8 @@
     <xacro:default_fixed_joint parent="right_upper_leg_pitch" child="right_upper_leg">
         <origin xyz="0 0 -${joint_cylinder_r+leg_upper_l/2}"/>
     </xacro:default_fixed_joint>
+
+    <xacro:gazebo_ref prefix="right_upper_leg" material="Gazebo/Red"/>
     <!--======================================================-->>
 
     <!--======================================================-->>
@@ -78,6 +88,8 @@
     <xacro:default_fixed_joint parent="left_upper_leg_pitch" child="left_upper_leg">
         <origin xyz="0 0 -${joint_cylinder_r+leg_upper_l/2}"/>
     </xacro:default_fixed_joint>
+
+    <xacro:gazebo_ref prefix="left_upper_leg" material="Gazebo/Red"/>
     <!--======================================================-->>
 
 </robot>

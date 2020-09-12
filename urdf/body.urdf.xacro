@@ -13,6 +13,8 @@
     <xacro:default_fixed_joint parent="base" child="body">
         <origin xyz="0 0 ${body_h/2}"/>
     </xacro:default_fixed_joint>
+
+    <xacro:gazebo_ref prefix="body" material="Gazebo/Red"/>
     <!--======================================================-->>
 
 

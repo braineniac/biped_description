@@ -1,3 +1,0 @@
-type: "position_controllers/JointPositionController"
-joint:
-    - left_leg_lower_joint_x_to_left_leg_lower_joint_y
