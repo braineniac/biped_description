@@ -1,13 +1,42 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="biped">
 
+
     <xacro:include filename="$(find biped_description)/urdf/common.urdf.xacro"/>
     <xacro:include filename="$(find biped_description)/urdf/inertials.urdf.xacro"/>
     <xacro:include filename="$(find biped_description)/urdf/materials.urdf.xacro"/>
-    <xacro:include filename="$(find biped_description)/urdf/body.urdf.xacro"/>
-    <xacro:include filename="$(find biped_description)/urdf/upper_legs.urdf.xacro"/>
-    <xacro:include filename="$(find biped_description)/urdf/lower_legs.urdf.xacro"/>
-    <xacro:include filename="$(find biped_description)/urdf/feet.urdf.xacro"/>
+    <xacro:include filename="$(find biped_description)/urdf/macros.urdf.xacro"/>
+
+
+    <xacro:property name="body_w" value="0.40"/>
+    <xacro:property name="body_d" value="0.30"/>
+    <xacro:property name="body_h" value="0.60"/>
+
+    <xacro:property name="leg_upper_r" value="0.04"/>
+    <xacro:property name="leg_upper_l" value="0.20"/>
+
+    <xacro:property name="leg_lower_r" value="0.02"/>
+    <xacro:property name="leg_lower_l" value="0.25"/>
+
+    <xacro:property name="foot_w" value="0.15"/>
+    <xacro:property name="foot_d" value="0.20"/>
+    <xacro:property name="foot_h" value="0.05"/>
+
+    <xacro:property name="default_effort" value="1000"/>
+    <xacro:property name="default_velocity" value="50"/>
+    <xacro:property name="default_damping" value="0.7"/>
+
+    <xacro:property name="default_mu1" value="100"/>
+    <xacro:property name="default_mu2" value="100"/>
+
+    <xacro:property name="joint_cylinder_r" value="0.02"/>
+    <xacro:property name="joint_cylinder_l" value="0.1"/>
+
+
+    <xacro:include filename="$(find biped_description)/urdf/biped/body.urdf.xacro"/>
+    <xacro:include filename="$(find biped_description)/urdf/biped/upper_legs.urdf.xacro"/>
+    <xacro:include filename="$(find biped_description)/urdf/biped/lower_legs.urdf.xacro"/>
+    <xacro:include filename="$(find biped_description)/urdf/biped/feet.urdf.xacro"/>
 
 
     <!-- Gazebo plugin for ROS Control -->
@@ -16,5 +45,6 @@
             <robotNamespace>/biped</robotNamespace>
         </plugin>
     </gazebo>
+
 
 </robot>

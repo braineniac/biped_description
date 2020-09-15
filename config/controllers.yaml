@@ -2,46 +2,48 @@ biped:
 # Publish all joint states -----------------------------------
     joint_state_controller:
         type: joint_state_controller/JointStateController
-        publish_rate: 50  
+        publish_rate: 200  
 
     # Position Controllers ---------------------------------------
     body_right_upper_leg_roll_joint_position_controller:
         type: effort_controllers/JointPositionController
         joint: body_right_upper_leg_roll_joint
-        pid: {p: 100.0, i: 0.01, d: 10.0}
+        pid: {p: 30000.0, i: 1000.00, d: 300.0, antiwindup: True}
     body_left_upper_leg_roll_joint_position_controller:
         type: effort_controllers/JointPositionController
         joint: body_left_upper_leg_roll_joint
-        pid: {p: 100.0, i: 0.01, d: 10.0}
+        pid: {p: 30000.0, i: 1000.00, d: 300.0, antiwindup: True}
     right_upper_leg_roll_right_upper_leg_pitch_joint_position_controller:
         type: effort_controllers/JointPositionController
         joint: right_upper_leg_roll_right_upper_leg_pitch_joint
-        pid: {p: 100.0, i: 0.01, d: 10.0}
+        pid: {p: 30000.0, i: 1000.00, d: 300.0, antiwindup: True}
     left_upper_leg_roll_left_upper_leg_pitch_joint_position_controller:
         type: effort_controllers/JointPositionController
         joint: left_upper_leg_roll_left_upper_leg_pitch_joint
-        pid: {p: 100.0, i: 0.01, d: 10.0}
+        pid: {p: 30000.0, i: 1000.00, d: 300.0, antiwindup: True}
+
     right_upper_leg_right_lower_leg_roll_joint_position_controller:
         type: effort_controllers/JointPositionController
         joint: right_upper_leg_right_lower_leg_roll_joint
-        pid: {p: 100.0, i: 0.01, d: 10.0}
+        pid: {p: 20000.0, i: 0.00, d: 1.0, antiwindup: True}
     left_upper_leg_left_lower_leg_roll_joint_position_controller:
         type: effort_controllers/JointPositionController
         joint: left_upper_leg_left_lower_leg_roll_joint
-        pid: {p: 100.0, i: 0.01, d: 10.0}
+        pid: {p: 20000.0, i: 0.00, d: 1.0, antiwindup: True}
+
     right_lower_leg_right_foot_roll_joint_position_controller:
         type: effort_controllers/JointPositionController
         joint: right_lower_leg_right_foot_roll_joint
-        pid: {p: 100.0, i: 0.01, d: 10.0}
+        pid: {p: 10000.0, i: 0.00, d: 1.0, antiwindup: True}
     left_lower_leg_left_foot_roll_joint_position_controller:
         type: effort_controllers/JointPositionController
         joint: left_lower_leg_left_foot_roll_joint
-        pid: {p: 100.0, i: 0.01, d: 10.0}
+        pid: {p: 10000.0, i: 0.00, d: 1.0, antiwindup: True}
     right_foot_roll_right_foot_pitch_joint_position_controller:
         type: effort_controllers/JointPositionController
         joint: right_foot_roll_right_foot_pitch_joint
-        pid: {p: 100.0, i: 0.01, d: 10.0}
+        pid: {p: 10000.0, i: 0.00, d: 1.0, antiwindup: True}
     left_foot_roll_left_foot_pitch_joint_position_controller:
         type: effort_controllers/JointPositionController
         joint: left_foot_roll_left_foot_pitch_joint
-        pid: {p: 100.0, i: 0.01, d: 10.0}
+        pid: {p: 10000.0, i: 0.00, d: 1.0, antiwindup: True}

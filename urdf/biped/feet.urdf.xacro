@@ -9,7 +9,7 @@
     </xacro:rot_link>
 
     <xacro:default_rot_joint parent="right_lower_leg" child="right_foot_roll">
-        <origin xyz="0 0 -${leg_lower_l/2}"/>
+        <origin xyz="0 0 -${leg_lower_l/2+joint_cylinder_r}"/>
         <axis xyz="1 0 0"/>
     </xacro:default_rot_joint>
 
@@ -25,7 +25,7 @@
     </xacro:rot_link>
 
     <xacro:default_rot_joint parent="left_lower_leg" child="left_foot_roll">
-        <origin xyz="0 0 -${leg_lower_l/2}"/>
+        <origin xyz="0 0 -${leg_lower_l/2+joint_cylinder_r}"/>
         <axis xyz="1 0 0"/>
     </xacro:default_rot_joint>
 
@@ -72,7 +72,7 @@
     </xacro:cuboid_link>
 
     <xacro:default_fixed_joint parent="right_foot_pitch" child="right_foot">
-        <origin xyz="0 0 -${joint_cylinder_r*2}"/>
+        <origin xyz="0 0 -${joint_cylinder_r+foot_h/2}"/>
     </xacro:default_fixed_joint>
 
     <xacro:gazebo_ref prefix="right_foot" material="Gazebo/Red"/>
@@ -84,7 +84,7 @@
     </xacro:cuboid_link>
 
     <xacro:default_fixed_joint parent="left_foot_pitch" child="left_foot">
-        <origin xyz="0 0 -${joint_cylinder_r*2}"/>
+        <origin xyz="0 0 -${joint_cylinder_r+foot_h/2}"/>
     </xacro:default_fixed_joint>
 
     <xacro:gazebo_ref prefix="left_foot" material="Gazebo/Red"/>
