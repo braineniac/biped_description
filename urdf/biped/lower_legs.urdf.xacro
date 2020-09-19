@@ -2,62 +2,36 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 
-    <!--======================================================-->>
-    <xacro:rot_link prefix="right_lower_leg_roll" rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}">
-        <xacro:rot_x_origin/>
-        <material name="yellow"/>
-    </xacro:rot_link>
+    <xacro:macro name="lower_leg" params="name parent">
 
-    <xacro:default_rot_joint parent="right_upper_leg" child="right_lower_leg_roll">
-        <origin xyz="0 0 -${leg_upper_l/2+joint_cylinder_r}"/>
-        <axis xyz="1 0 0"/>
-    </xacro:default_rot_joint>
+        <xacro:solid_cylinder_link prefix="${name}_roll" rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}">
+            <xacro:rot_x_origin/>
+            <material name="yellow"/>
+        </xacro:solid_cylinder_link>
 
-    <xacro:joint_trans parent="right_upper_leg" child="right_lower_leg_roll"/>
+        <xacro:rot_joint parent="${parent}" child="${name}_roll"
+                effort="${effort}" velocity="${velocity}" damping="${damping}">
+            <origin xyz="0 0 -${leg_upper_l/2+joint_cylinder_r}"/>
+            <axis xyz="1 0 0"/>
+        </xacro:rot_joint>
 
-    <xacro:gazebo_ref prefix="right_lower_leg_roll" material="Gazebo/Yellow"/>
-    <!--======================================================-->>
+        <xacro:effort_trans parent="${parent}" child="${name}_roll"/>
 
-    <!--======================================================-->>
-    <xacro:rot_link prefix="left_lower_leg_roll" rho="${rho_Fe}" r="${joint_cylinder_r}" l="${joint_cylinder_l}">
-        <xacro:rot_x_origin/>
-        <material name="yellow"/>
-    </xacro:rot_link>
+        <xacro:gaz_link prefix="${name}_roll" material="Gazebo/Yellow" mu1="${mu1}" mu2="${mu2}"/>
 
-    <xacro:default_rot_joint parent="left_upper_leg" child="left_lower_leg_roll">
-        <origin xyz="0 0 -${leg_upper_l/2+joint_cylinder_r}"/>
-        <axis xyz="1 0 0"/>
-    </xacro:default_rot_joint>
 
-    <xacro:joint_trans parent="left_upper_leg" child="left_lower_leg_roll"/>
+        <xacro:solid_cylinder_link prefix="${name}" rho="${rho_Fe}" r="${leg_lower_r}" l="${leg_lower_l}">
+            <origin xyz="0 0 0"/>
+            <material name="red"/>
+        </xacro:solid_cylinder_link>
 
-    <xacro:gazebo_ref prefix="left_lower_leg_roll" material="Gazebo/Yellow"/>
-    <!--======================================================-->>
+        <xacro:fixed_joint parent="${name}_roll" child="${name}">
+            <origin xyz="0 0 -${joint_cylinder_r+leg_lower_l/2}"/>
+        </xacro:fixed_joint>
 
-    <!--======================================================-->>
-    <xacro:rot_link prefix="right_lower_leg" rho="${rho_Fe}" r="${leg_lower_r}" l="${leg_lower_l}">
-        <origin xyz="0 0 0"/>
-        <material name="red"/>
-    </xacro:rot_link>
+        <xacro:gaz_link prefix="${name}" material="Gazebo/Red" mu1="${mu1}" mu2="${mu2}"/>
 
-    <xacro:default_fixed_joint parent="right_lower_leg_roll" child="right_lower_leg">
-        <origin xyz="0 0 -${joint_cylinder_r+leg_lower_l/2}"/>
-    </xacro:default_fixed_joint>
+    </xacro:macro>
 
-    <xacro:gazebo_ref prefix="right_lower_leg" material="Gazebo/Red"/>
-    <!--======================================================-->>
-
-    <!--======================================================-->>
-    <xacro:rot_link prefix="left_lower_leg" rho="${rho_Fe}" r="${leg_lower_r}" l="${leg_lower_l}">
-        <origin xyz="0 0 0"/>
-        <material name="red"/>
-    </xacro:rot_link>
-
-    <xacro:default_fixed_joint parent="left_lower_leg_roll" child="left_lower_leg">
-        <origin xyz="0 0 -${joint_cylinder_r+leg_lower_l/2}"/>
-    </xacro:default_fixed_joint>
-
-    <xacro:gazebo_ref prefix="left_lower_leg" material="Gazebo/Red"/>
-    <!--======================================================-->>
 
 </robot>

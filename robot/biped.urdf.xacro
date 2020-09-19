@@ -1,11 +1,19 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="biped">
 
+    <xacro:include filename="$(find xacro_common)/common.urdf.xacro"/>
+    <xacro:include filename="$(find xacro_common)/constants.urdf.xacro"/>
+    <xacro:include filename="$(find xacro_common)/gazebo.urdf.xacro"/>
+    <xacro:include filename="$(find xacro_common)/links.urdf.xacro"/>
+    <xacro:include filename="$(find xacro_common)/joints.urdf.xacro"/>
+    <xacro:include filename="$(find xacro_common)/inertials.urdf.xacro"/>
+    <xacro:include filename="$(find xacro_common)/materials.urdf.xacro"/>
+    <xacro:include filename="$(find xacro_common)/transmissions.urdf.xacro"/>
 
-    <xacro:include filename="$(find biped_description)/urdf/common.urdf.xacro"/>
-    <xacro:include filename="$(find biped_description)/urdf/inertials.urdf.xacro"/>
-    <xacro:include filename="$(find biped_description)/urdf/materials.urdf.xacro"/>
-    <xacro:include filename="$(find biped_description)/urdf/macros.urdf.xacro"/>
+    <xacro:include filename="$(find biped_description)/urdf/biped/body.urdf.xacro"/>
+    <xacro:include filename="$(find biped_description)/urdf/biped/upper_legs.urdf.xacro"/>
+    <xacro:include filename="$(find biped_description)/urdf/biped/lower_legs.urdf.xacro"/>
+    <xacro:include filename="$(find biped_description)/urdf/biped/feet.urdf.xacro"/>
 
 
     <xacro:property name="body_w" value="0.40"/>
@@ -22,21 +30,30 @@
     <xacro:property name="foot_d" value="0.20"/>
     <xacro:property name="foot_h" value="0.05"/>
 
-    <xacro:property name="default_effort" value="1000"/>
-    <xacro:property name="default_velocity" value="50"/>
-    <xacro:property name="default_damping" value="0.7"/>
+    <xacro:property name="effort" value="1000"/>
+    <xacro:property name="velocity" value="50"/>
+    <xacro:property name="damping" value="0.7"/>
 
-    <xacro:property name="default_mu1" value="100"/>
-    <xacro:property name="default_mu2" value="100"/>
+    <xacro:property name="mu1" value="100"/>
+    <xacro:property name="mu2" value="100"/>
 
     <xacro:property name="joint_cylinder_r" value="0.02"/>
     <xacro:property name="joint_cylinder_l" value="0.1"/>
 
 
-    <xacro:include filename="$(find biped_description)/urdf/biped/body.urdf.xacro"/>
-    <xacro:include filename="$(find biped_description)/urdf/biped/upper_legs.urdf.xacro"/>
-    <xacro:include filename="$(find biped_description)/urdf/biped/lower_legs.urdf.xacro"/>
-    <xacro:include filename="$(find biped_description)/urdf/biped/feet.urdf.xacro"/>
+    <!-- Place parts-->>
+    <xacro:base/>
+
+    <xacro:body name="body" parent="base"/>
+
+    <xacro:upper_leg name="right_upper_leg" parent="body" reflect="1"/>
+    <xacro:upper_leg name="left_upper_leg" parent="body" reflect="-1"/>
+
+    <xacro:lower_leg name="right_lower_leg" parent="right_upper_leg"/>
+    <xacro:lower_leg name="left_lower_leg" parent="left_upper_leg"/>
+
+    <xacro:foot name="right_foot" parent="right_lower_leg"/>
+    <xacro:foot name="left_foot" parent="left_lower_leg"/>
 
 
     <!-- Gazebo plugin for ROS Control -->
